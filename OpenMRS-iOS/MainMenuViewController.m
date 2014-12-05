@@ -43,6 +43,7 @@
     }
     cell.textLabel.text = @"Patient Search";
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.imageView.image = [UIImage imageNamed:@"openmrs_icon_search.png"];
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

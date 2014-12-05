@@ -30,6 +30,10 @@
 		D397397C1A2E082300D0AB69 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D397397B1A2E082300D0AB69 /* Images.xcassets */; };
 		D397397F1A2E082300D0AB69 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D397397D1A2E082300D0AB69 /* LaunchScreen.xib */; };
 		D397398B1A2E082300D0AB69 /* OpenMRS_iOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D397398A1A2E082300D0AB69 /* OpenMRS_iOSTests.m */; };
+		D8FF487B1A32454300976150 /* openmrs_icon_visit.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF48791A32454300976150 /* openmrs_icon_visit.png */; };
+		D8FF487C1A32454300976150 /* openmrs_icon_visit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF487A1A32454300976150 /* openmrs_icon_visit@2x.png */; };
+		D8FF487F1A3249F900976150 /* openmrs_icon_search.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF487D1A3249F900976150 /* openmrs_icon_search.png */; };
+		D8FF48801A3249F900976150 /* openmrs_icon_search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF487E1A3249F900976150 /* openmrs_icon_search@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +91,10 @@
 		D39739841A2E082300D0AB69 /* OpenMRS-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OpenMRS-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39739891A2E082300D0AB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D397398A1A2E082300D0AB69 /* OpenMRS_iOSTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenMRS_iOSTests.m; sourceTree = "<group>"; };
+		D8FF48791A32454300976150 /* openmrs_icon_visit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = openmrs_icon_visit.png; path = icons/openmrs_icon_visit.png; sourceTree = "<group>"; };
+		D8FF487A1A32454300976150 /* openmrs_icon_visit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "openmrs_icon_visit@2x.png"; path = "icons/openmrs_icon_visit@2x.png"; sourceTree = "<group>"; };
+		D8FF487D1A3249F900976150 /* openmrs_icon_search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = openmrs_icon_search.png; path = icons/openmrs_icon_search.png; sourceTree = "<group>"; };
+		D8FF487E1A3249F900976150 /* openmrs_icon_search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "openmrs_icon_search@2x.png"; path = "icons/openmrs_icon_search@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +187,7 @@
 		D397396E1A2E082200D0AB69 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D8FF48781A32452E00976150 /* icons */,
 				D396A53C1A2E0B5A00DE6448 /* openmrs-logo@2x.png */,
 				D396A53D1A2E0B5A00DE6448 /* openmrs-logo@3x.png */,
 				D396A53E1A2E0B5A00DE6448 /* openmrs-logo.png */,
@@ -203,6 +212,17 @@
 				D39739891A2E082300D0AB69 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D8FF48781A32452E00976150 /* icons */ = {
+			isa = PBXGroup;
+			children = (
+				D8FF487D1A3249F900976150 /* openmrs_icon_search.png */,
+				D8FF487E1A3249F900976150 /* openmrs_icon_search@2x.png */,
+				D8FF48791A32454300976150 /* openmrs_icon_visit.png */,
+				D8FF487A1A32454300976150 /* openmrs_icon_visit@2x.png */,
+			);
+			name = icons;
 			sourceTree = "<group>";
 		};
 		E54315529FE081E009C0AF4D /* Pods */ = {
@@ -297,9 +317,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D397397F1A2E082300D0AB69 /* LaunchScreen.xib in Resources */,
+				D8FF487B1A32454300976150 /* openmrs_icon_visit.png in Resources */,
 				D397397C1A2E082300D0AB69 /* Images.xcassets in Resources */,
+				D8FF48801A3249F900976150 /* openmrs_icon_search@2x.png in Resources */,
+				D8FF487F1A3249F900976150 /* openmrs_icon_search.png in Resources */,
 				D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */,
 				D396A5401A2E0B5A00DE6448 /* openmrs-logo@3x.png in Resources */,
+				D8FF487C1A32454300976150 /* openmrs_icon_visit@2x.png in Resources */,
 				D396A5411A2E0B5A00DE6448 /* openmrs-logo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

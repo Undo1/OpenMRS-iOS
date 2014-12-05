@@ -176,6 +176,7 @@
         {
             cell.textLabel.text = @"Visits";
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.visits.count];
+            cell.imageView.image = [UIImage imageNamed:@"openmrs_icon_visit.png"];
             
             return cell;
         }
