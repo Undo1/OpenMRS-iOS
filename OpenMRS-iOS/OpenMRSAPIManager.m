@@ -39,9 +39,10 @@
     
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
     
-    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter?patient=%@", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter?patient=%@&encounterType=vitals", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
-        NSLog(@"array: %@", results);
+//        NSLog(@"json: %@", [[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
+//        NSLog(@"array: %@", results);
         
         NSMutableArray *array = [[NSMutableArray alloc] init];
         

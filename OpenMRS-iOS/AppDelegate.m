@@ -7,8 +7,8 @@
 
 #import "AppDelegate.h"
 #import "SignInViewController.h"
-#import "MainMenuViewController.h"
 #import "KeychainItemWrapper.h"
+#import "LandingPageViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -23,7 +23,7 @@
     
 //    [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] resetKeychainItem];
     
-    MainMenuViewController *menu = [[MainMenuViewController alloc] init];
+    LandingPageViewController *menu = [[LandingPageViewController alloc] init];
     
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:menu];
     

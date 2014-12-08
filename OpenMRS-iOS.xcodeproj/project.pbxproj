@@ -34,6 +34,8 @@
 		D8FF487C1A32454300976150 /* openmrs_icon_visit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF487A1A32454300976150 /* openmrs_icon_visit@2x.png */; };
 		D8FF487F1A3249F900976150 /* openmrs_icon_search.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF487D1A3249F900976150 /* openmrs_icon_search.png */; };
 		D8FF48801A3249F900976150 /* openmrs_icon_search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF487E1A3249F900976150 /* openmrs_icon_search@2x.png */; };
+		D8FF48851A36078600976150 /* LandingPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FF48831A36078600976150 /* LandingPageViewController.m */; };
+		D8FF48861A36078600976150 /* LandingPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8FF48841A36078600976150 /* LandingPageViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +97,9 @@
 		D8FF487A1A32454300976150 /* openmrs_icon_visit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "openmrs_icon_visit@2x.png"; path = "icons/openmrs_icon_visit@2x.png"; sourceTree = "<group>"; };
 		D8FF487D1A3249F900976150 /* openmrs_icon_search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = openmrs_icon_search.png; path = icons/openmrs_icon_search.png; sourceTree = "<group>"; };
 		D8FF487E1A3249F900976150 /* openmrs_icon_search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "openmrs_icon_search@2x.png"; path = "icons/openmrs_icon_search@2x.png"; sourceTree = "<group>"; };
+		D8FF48821A36078600976150 /* LandingPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LandingPageViewController.h; sourceTree = "<group>"; };
+		D8FF48831A36078600976150 /* LandingPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LandingPageViewController.m; sourceTree = "<group>"; };
+		D8FF48841A36078600976150 /* LandingPageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LandingPageViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +152,7 @@
 		D397396D1A2E082200D0AB69 /* OpenMRS-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				D8FF48811A32704A00976150 /* Model */,
 				D396A5121A2E09DE00DE6448 /* PatientViewController.h */,
 				D396A5131A2E09DE00DE6448 /* PatientViewController.m */,
 				D396A54E1A2E3F7600DE6448 /* PatientVisitListView.h */,
@@ -159,8 +165,6 @@
 				D396A5171A2E09DE00DE6448 /* SignInViewController.m */,
 				D396A5181A2E09DE00DE6448 /* OpenMRSAPIManager.h */,
 				D396A5191A2E09DE00DE6448 /* OpenMRSAPIManager.m */,
-				D396A5481A2E3CBC00DE6448 /* MRSEncounter.h */,
-				D396A5491A2E3CBC00DE6448 /* MRSEncounter.m */,
 				D396A51A1A2E09DE00DE6448 /* KeychainItemWrapper.h */,
 				D396A51B1A2E09DE00DE6448 /* KeychainItemWrapper.m */,
 				D396A51C1A2E09DE00DE6448 /* MainMenuViewController.h */,
@@ -169,14 +173,13 @@
 				D396A5431A2E0CEF00DE6448 /* SettingsViewController.m */,
 				D396A51E1A2E09DE00DE6448 /* PatientSearchViewController.h */,
 				D396A51F1A2E09DE00DE6448 /* PatientSearchViewController.m */,
-				D396A5201A2E09DE00DE6448 /* MRSPatient.h */,
-				D396A5211A2E09DE00DE6448 /* MRSPatient.m */,
-				D396A5451A2E396300DE6448 /* MRSVisit.h */,
-				D396A5461A2E396300DE6448 /* MRSVisit.m */,
 				D396A5221A2E09DE00DE6448 /* CredentialsLayer.h */,
 				D396A5231A2E09DE00DE6448 /* CredentialsLayer.m */,
 				D396A5241A2E09DE00DE6448 /* ViewController.h */,
 				D396A5251A2E09DE00DE6448 /* ViewController.m */,
+				D8FF48821A36078600976150 /* LandingPageViewController.h */,
+				D8FF48831A36078600976150 /* LandingPageViewController.m */,
+				D8FF48841A36078600976150 /* LandingPageViewController.xib */,
 				D397397B1A2E082300D0AB69 /* Images.xcassets */,
 				D397397D1A2E082300D0AB69 /* LaunchScreen.xib */,
 				D397396E1A2E082200D0AB69 /* Supporting Files */,
@@ -223,6 +226,19 @@
 				D8FF487A1A32454300976150 /* openmrs_icon_visit@2x.png */,
 			);
 			name = icons;
+			sourceTree = "<group>";
+		};
+		D8FF48811A32704A00976150 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D396A5481A2E3CBC00DE6448 /* MRSEncounter.h */,
+				D396A5491A2E3CBC00DE6448 /* MRSEncounter.m */,
+				D396A5201A2E09DE00DE6448 /* MRSPatient.h */,
+				D396A5211A2E09DE00DE6448 /* MRSPatient.m */,
+				D396A5451A2E396300DE6448 /* MRSVisit.h */,
+				D396A5461A2E396300DE6448 /* MRSVisit.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		E54315529FE081E009C0AF4D /* Pods */ = {
@@ -317,6 +333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D397397F1A2E082300D0AB69 /* LaunchScreen.xib in Resources */,
+				D8FF48861A36078600976150 /* LandingPageViewController.xib in Resources */,
 				D8FF487B1A32454300976150 /* openmrs_icon_visit.png in Resources */,
 				D397397C1A2E082300D0AB69 /* Images.xcassets in Resources */,
 				D8FF48801A3249F900976150 /* openmrs_icon_search@2x.png in Resources */,
@@ -376,6 +393,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D396A5471A2E396300DE6448 /* MRSVisit.m in Sources */,
+				D8FF48851A36078600976150 /* LandingPageViewController.m in Sources */,
 				D396A52E1A2E09DE00DE6448 /* CredentialsLayer.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
 				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
