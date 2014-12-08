@@ -23,6 +23,9 @@
     
 //    [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] resetKeychainItem];
     
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    self.theme = [[MRSTheme alloc] init];
+    
     LandingPageViewController *menu = [[LandingPageViewController alloc] init];
     
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:menu];
@@ -64,4 +67,7 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
++(AppDelegate*) instance {
+    return (AppDelegate *)[[UIApplication sharedApplication] delegate];
+}
 @end

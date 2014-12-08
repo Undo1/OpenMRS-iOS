@@ -7,36 +7,37 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LandingPageViewController">
             <connections>
-                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="patientSearchButton" destination="v2o-3j-4il" id="iu8-0Z-Qw1"/>
+                <outlet property="view" destination="RNh-6U-XEN" id="S3P-cH-OWq"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+        <view contentMode="scaleToFill" id="RNh-6U-XEN">
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J3v-QX-7x4">
-                    <rect key="frame" x="100" y="125" width="160" height="130"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v2o-3j-4il">
+                    <rect key="frame" x="15" y="80" width="140" height="140"/>
                     <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="130" id="Pjd-fs-agn"/>
-                        <constraint firstAttribute="width" constant="160" id="fXB-4T-7UR"/>
+                        <constraint firstAttribute="width" constant="140" id="JFC-iV-xrD"/>
+                        <constraint firstAttribute="height" constant="140" id="tiD-nd-C9m"/>
                     </constraints>
-                    <inset key="titleEdgeInsets" minX="-30" minY="50" maxX="0.0" maxY="0.0"/>
-                    <inset key="imageEdgeInsets" minX="50" minY="-20" maxX="0.0" maxY="0.0"/>
                     <state key="normal" title="Patient Search" image="openmrs_icon_search.png">
-                        <color key="titleColor" red="0.0" green="0.27843138579999999" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleColor" red="0.0" green="0.27450980392156865" blue="0.24705882352941178" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="showPatientSearch" destination="-1" eventType="touchUpInside" id="m7L-gm-bZM"/>
+                        <action selector="showPatientSearch" destination="-1" eventType="touchUpInside" id="IvF-Um-a8G"/>
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" red="0.0" green="0.27450980392156865" blue="0.24705882352941178" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="J3v-QX-7x4" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="125" id="ZF7-5m-Pwi"/>
-                <constraint firstItem="J3v-QX-7x4" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="100" id="epq-U7-h0a"/>
+                <constraint firstItem="v2o-3j-4il" firstAttribute="top" secondItem="RNh-6U-XEN" secondAttribute="top" constant="80" id="6kK-0R-62h"/>
+                <constraint firstItem="v2o-3j-4il" firstAttribute="leading" secondItem="RNh-6U-XEN" secondAttribute="leading" constant="15" id="mYG-Ih-Izc"/>
             </constraints>
+            <point key="canvasLocation" x="549" y="-881"/>
         </view>
     </objects>
     <resources>

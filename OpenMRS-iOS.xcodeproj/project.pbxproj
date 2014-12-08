@@ -36,6 +36,8 @@
 		D8FF48801A3249F900976150 /* openmrs_icon_search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF487E1A3249F900976150 /* openmrs_icon_search@2x.png */; };
 		D8FF48851A36078600976150 /* LandingPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FF48831A36078600976150 /* LandingPageViewController.m */; };
 		D8FF48861A36078600976150 /* LandingPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8FF48841A36078600976150 /* LandingPageViewController.xib */; };
+		D8FF488A1A36127E00976150 /* UIButton+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FF48891A36127E00976150 /* UIButton+Extensions.m */; };
+		D8FF488D1A361F4E00976150 /* MRSTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FF488C1A361F4E00976150 /* MRSTheme.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +102,10 @@
 		D8FF48821A36078600976150 /* LandingPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LandingPageViewController.h; sourceTree = "<group>"; };
 		D8FF48831A36078600976150 /* LandingPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LandingPageViewController.m; sourceTree = "<group>"; };
 		D8FF48841A36078600976150 /* LandingPageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LandingPageViewController.xib; sourceTree = "<group>"; };
+		D8FF48881A36127E00976150 /* UIButton+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Extensions.h"; sourceTree = "<group>"; };
+		D8FF48891A36127E00976150 /* UIButton+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Extensions.m"; sourceTree = "<group>"; };
+		D8FF488B1A361F4E00976150 /* MRSTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSTheme.h; sourceTree = "<group>"; };
+		D8FF488C1A361F4E00976150 /* MRSTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSTheme.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +158,7 @@
 		D397396D1A2E082200D0AB69 /* OpenMRS-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				D8FF48871A36126000976150 /* Extensions */,
 				D8FF48811A32704A00976150 /* Model */,
 				D396A5121A2E09DE00DE6448 /* PatientViewController.h */,
 				D396A5131A2E09DE00DE6448 /* PatientViewController.m */,
@@ -159,6 +166,8 @@
 				D396A54F1A2E3F7600DE6448 /* PatientVisitListView.m */,
 				D396A54B1A2E3E5600DE6448 /* PatientEncounterListView.h */,
 				D396A54C1A2E3E5600DE6448 /* PatientEncounterListView.m */,
+				D8FF488B1A361F4E00976150 /* MRSTheme.h */,
+				D8FF488C1A361F4E00976150 /* MRSTheme.m */,
 				D396A5141A2E09DE00DE6448 /* AppDelegate.h */,
 				D396A5151A2E09DE00DE6448 /* AppDelegate.m */,
 				D396A5161A2E09DE00DE6448 /* SignInViewController.h */,
@@ -239,6 +248,15 @@
 				D396A5461A2E396300DE6448 /* MRSVisit.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		D8FF48871A36126000976150 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D8FF48881A36127E00976150 /* UIButton+Extensions.h */,
+				D8FF48891A36127E00976150 /* UIButton+Extensions.m */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 		E54315529FE081E009C0AF4D /* Pods */ = {
@@ -393,8 +411,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				D396A5471A2E396300DE6448 /* MRSVisit.m in Sources */,
+				D8FF488A1A36127E00976150 /* UIButton+Extensions.m in Sources */,
 				D8FF48851A36078600976150 /* LandingPageViewController.m in Sources */,
 				D396A52E1A2E09DE00DE6448 /* CredentialsLayer.m in Sources */,
+				D8FF488D1A361F4E00976150 /* MRSTheme.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
 				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
 				D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */,

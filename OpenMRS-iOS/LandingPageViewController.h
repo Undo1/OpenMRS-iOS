@@ -10,6 +10,7 @@
 
 @interface LandingPageViewController : UIViewController
 
+@property (nonatomic, strong) IBOutlet UIButton* patientSearchButton;
 - (IBAction) showPatientSearch;
 
 @end
