@@ -14,6 +14,7 @@
 #import "SignInViewController.h"
 #import "AppDelegate.h"
 #import "KeychainItemWrapper.h"
+#import "MRSVitalSigns.h"
 
 @implementation OpenMRSAPIManager
 + (void)verifyCredentialsWithUsername:(NSString *)username password:(NSString *)password host:(NSString *)host completion:(void (^)(BOOL success))completion
@@ -29,6 +30,26 @@
         completion(NO);
     }];
 }
++ (void)getVitalsForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *vitals))completion
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter?v=full&patient=%@&encounterType=vitals", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+        completion(nil, [MRSVitalSigns fromJsonList:results]);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(error, nil);
+        NSLog(@"Failure, %@", error);
+    }];
+}
 + (void)getEncountersForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *encounters))completion
 {
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
@@ -39,10 +60,8 @@
     
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
     
-    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter?patient=%@&encounterType=vitals", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter?patient=%@", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
-//        NSLog(@"json: %@", [[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
-//        NSLog(@"array: %@", results);
         
         NSMutableArray *array = [[NSMutableArray alloc] init];
         

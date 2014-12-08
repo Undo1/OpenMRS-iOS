@@ -38,6 +38,7 @@
 		D8FF48861A36078600976150 /* LandingPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8FF48841A36078600976150 /* LandingPageViewController.xib */; };
 		D8FF488A1A36127E00976150 /* UIButton+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FF48891A36127E00976150 /* UIButton+Extensions.m */; };
 		D8FF488D1A361F4E00976150 /* MRSTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FF488C1A361F4E00976150 /* MRSTheme.m */; };
+		D8FF48901A36600300976150 /* MRSVitalSigns.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FF488F1A36600300976150 /* MRSVitalSigns.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +107,8 @@
 		D8FF48891A36127E00976150 /* UIButton+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Extensions.m"; sourceTree = "<group>"; };
 		D8FF488B1A361F4E00976150 /* MRSTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSTheme.h; sourceTree = "<group>"; };
 		D8FF488C1A361F4E00976150 /* MRSTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSTheme.m; sourceTree = "<group>"; };
+		D8FF488E1A36600300976150 /* MRSVitalSigns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSVitalSigns.h; sourceTree = "<group>"; };
+		D8FF488F1A36600300976150 /* MRSVitalSigns.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSVitalSigns.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,6 +249,8 @@
 				D396A5211A2E09DE00DE6448 /* MRSPatient.m */,
 				D396A5451A2E396300DE6448 /* MRSVisit.h */,
 				D396A5461A2E396300DE6448 /* MRSVisit.m */,
+				D8FF488E1A36600300976150 /* MRSVitalSigns.h */,
+				D8FF488F1A36600300976150 /* MRSVitalSigns.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -410,6 +415,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8FF48901A36600300976150 /* MRSVitalSigns.m in Sources */,
 				D396A5471A2E396300DE6448 /* MRSVisit.m in Sources */,
 				D8FF488A1A36127E00976150 /* UIButton+Extensions.m in Sources */,
 				D8FF48851A36078600976150 /* LandingPageViewController.m in Sources */,

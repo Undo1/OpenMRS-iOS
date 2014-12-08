@@ -16,4 +16,5 @@
 + (void)getVisitsForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *visits))completion;
 + (void)getEncountersForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *encounters))completion;
 + (void)logout;
++ (void)getVitalsForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *vitals))completion;
 @end
