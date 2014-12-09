@@ -10,6 +10,9 @@
 @interface MRSVitalSigns : MRSEncounter
 
 @property (nonatomic, strong) NSDate* encounterDatetime;
+@property (nonatomic, strong) NSArray* observations;
+@property (nonatomic, readonly) NSString* formattedEncounterDatetime;
+@property (nonatomic, readonly) NSString* formattedFullEncounterDatetime;
 
-+(NSArray*) fromJsonList:(NSDictionary*) json;
++(NSArray*) fromJsonList:(NSArray*) json;
 @end

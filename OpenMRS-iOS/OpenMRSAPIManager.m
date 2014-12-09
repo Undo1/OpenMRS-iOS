@@ -43,7 +43,7 @@
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter?v=full&patient=%@&encounterType=vitals", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
 
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
-        completion(nil, [MRSVitalSigns fromJsonList:results]);
+        completion(nil, [MRSVitalSigns fromJsonList:results[@"results"]]);
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         completion(error, nil);
