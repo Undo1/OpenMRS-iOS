@@ -154,6 +154,17 @@
 }
 
 #pragma mark - Vital-signs-related methods
+-(NSUInteger) numberOfVitalSignsRowsExcludingHeader {
+    if ([self isVitalSignsAvailable]) {
+        NSUInteger result = [self latestVitalSigns].observations.count;
+        if (self.vitalSigns.count > 1) {
+            result++;
+        }
+        return result;
+    } else {
+        return 1;
+    }
+}
 -(MRSVitalSigns*) latestVitalSigns {
     return [self isVitalSignsAvailable] ? [self.vitalSigns objectAtIndex:0] : nil;
 }
@@ -185,7 +196,7 @@
     }
     else if (section == 1)
     {
-        return self.vitalSignsExpanded ? (self.vitalSignsError || self.vitalSigns.count == 0 ? 2 : ([self latestVitalSigns].observations.count + 2)) : 1;
+        return self.vitalSignsExpanded ? [self numberOfVitalSignsRowsExcludingHeader] + 1 : 1;
     }
     else // section == 2
     {
@@ -240,6 +251,7 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"vitalSignCell"];
         }
 
+        cell.accessoryType = UITableViewCellAccessoryNone;
         if (!self.isViewLoaded) {
             cell.textLabel.text = @"Loading...";
             cell.detailTextLabel.text = nil;
@@ -256,6 +268,7 @@
         } else {
             cell.textLabel.text = @"More...";
             cell.detailTextLabel.text = nil;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         return cell;
     } else {
@@ -281,20 +294,31 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 1 && indexPath.row == 0) {
-        //BOOL expanded = self.vitalSignsExpanded;
+        BOOL expanded = self.vitalSignsExpanded;
         
         self.vitalSignsExpanded = !self.vitalSignsExpanded;
-        /*
+
         [self.tableView beginUpdates];
+//        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        
+        NSUInteger count = [self numberOfVitalSignsRowsExcludingHeader];
+        NSMutableArray* paths = [[NSMutableArray alloc] init];
+        for (int i = 1; i <= count; i++) {
+            [paths addObject:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
+        }
+
+        
         if (expanded) {
-            
+            [tableView deleteRowsAtIndexPaths:paths
+                             withRowAnimation:UITableViewRowAnimationTop];
         } else {
-            
+            [tableView insertRowsAtIndexPaths:paths
+                             withRowAnimation:UITableViewRowAnimationTop];
         }
         [self.tableView endUpdates];
-         */
-        [self.tableView reloadData];
-         
+        
+        [self performSelector:@selector(toggleOpenIndicator:) withObject:indexPath afterDelay:0.3];
+        
     } else if (indexPath.section == 2) {
         if (indexPath.row == 1) //encounters row selected
         {
@@ -309,5 +333,12 @@
             [self.navigationController pushViewController:visitsList animated:YES];
         }
     }
+}
+
+-(void) toggleOpenIndicator:(NSIndexPath*) indexPath {
+    [self.tableView beginUpdates];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
+    
 }
 @end
