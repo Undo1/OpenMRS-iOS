@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MRSTheme.h"
+#import "AFNetworking.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -14,6 +15,7 @@
 @property (strong, nonatomic) MRSTheme* theme;
 
 +(AppDelegate*) instance;
+@property (nonatomic, strong) AFHTTPRequestOperation *currentSearchOperation;
 
 @end
 

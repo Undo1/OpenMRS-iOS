@@ -108,6 +108,8 @@
 }
 + (void)getPatientListWithSearch:(NSString *)search completion:(void (^)(NSError *error, NSArray *patients))completion
 {
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
     NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
     NSURL *hostUrl = [NSURL URLWithString:host];
@@ -116,7 +118,9 @@
     
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
     
-    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/patient?q=%@", host, [search stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self cancelPreviousSearchOperations];
+    
+    delegate.currentSearchOperation = [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/patient?q=%@", host, [search stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
 //        NSLog(@"Success, %@", [[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
 //        NSLog(@"array: %@", results[@"results"]);
@@ -217,5 +221,10 @@
     }
     
     [OpenMRSAPIManager presentLoginController];
+}
++ (void)cancelPreviousSearchOperations
+{
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    [delegate.currentSearchOperation cancel];
 }
 @end
