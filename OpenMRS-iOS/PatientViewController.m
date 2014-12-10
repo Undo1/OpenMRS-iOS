@@ -236,7 +236,7 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"vitalHeaderCell"];
         }
 
-        cell.textLabel.text = @"Latest Vital Signs";
+        cell.textLabel.text = @"Vital Signs";
         cell.imageView.image = [UIImage imageNamed:self.vitalSignsExpanded ?  @"openmrs_icon_caretdown.png" :  @"openmrs_icon_caretright.png"];
         
         if ([self isVitalSignsAvailable]) {
