@@ -10,10 +10,13 @@
 #import "CredentialsLayer.h"
 #import "MRSPatient.h"
 #import "MRSVisit.h"
+#import "MRSEncounterOb.h"
 #import "MRSEncounter.h"
 #import "SignInViewController.h"
 #import "AppDelegate.h"
+#import "MRSEncounterType.h"
 #import "KeychainItemWrapper.h"
+#import <CoreData/CoreData.h>
 
 @implementation OpenMRSAPIManager
 + (void)verifyCredentialsWithUsername:(NSString *)username password:(NSString *)password host:(NSString *)host completion:(void (^)(BOOL success))completion
@@ -29,6 +32,105 @@
         completion(NO);
     }];
 }
++ (void)getEncounterTypesWithCompletion:(void (^)(NSError *, NSArray *))completion
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encountertype", host] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+        NSLog(@"encounter types array: %@", results);
+        
+        NSMutableArray *array = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *dict in results[@"results"]) {
+            MRSEncounterType *type = [[MRSEncounterType alloc] init];
+            type.UUID = dict[@"uuid"];
+            type.display = dict[@"display"];
+            [array addObject:type];
+        }
+        
+        completion(nil, array);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(error, nil);
+        NSLog(@"Failure, %@", error);
+    }];
+
+}
++ (void)getDetailedDataOnEncounter:(MRSEncounter *)encounter completion:(void (^)(NSError *, MRSEncounter *))completion
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    NSLog(@"%@", encounter.UUID);
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter/%@?v=full", host, encounter.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+        NSLog(@"encounter detail array: %@", results);
+        
+        NSMutableArray *array = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *obDict in results[@"obs"]) {
+            MRSEncounterOb *ob = [[MRSEncounterOb alloc] init];
+            ob.UUID = obDict[@"uuid"];
+            ob.display = obDict[@"display"];
+            [array addObject:ob];
+        }
+        encounter.obs = array;
+        
+        completion(nil, encounter);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (error.code == -1009) //network down
+        {
+            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+            
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            [fetchRequest setEntity:[NSEntityDescription entityForName:@"EncounterOb" inManagedObjectContext:appDelegate.managedObjectContext]];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(encounter == %@)", encounter.UUID];
+            [fetchRequest setPredicate:predicate];
+            
+            NSError *error;
+            NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+            
+            if (error)
+            {
+                NSLog(@"error: %@", error);
+            }
+            
+            if (results.count > 0)
+            {
+                NSMutableArray *obs = [[NSMutableArray alloc] init];
+                for (NSManagedObject *object in results) {
+                    MRSEncounterOb *encounterOb = [[MRSEncounterOb alloc] init];
+                    encounterOb.UUID = [object valueForKey:@"uuid"];
+                    encounterOb.encounterDisplay = [object valueForKey:@"encounterDisplay"];
+                    encounterOb.display = [object valueForKey:@"display"];
+                    [obs addObject:encounterOb];
+                }
+                encounter.obs = obs;
+                completion(nil, encounter);
+            }
+        }
+        else
+        {
+            completion(error, nil);
+        }
+        NSLog(@"Failure, %@", error);
+    }];
+}
 + (void)getEncountersForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *encounters))completion
 {
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
@@ -41,7 +143,7 @@
     
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter?patient=%@", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
-        NSLog(@"array: %@", results);
+        NSLog(@"encounter array: %@", results);
         
         NSMutableArray *array = [[NSMutableArray alloc] init];
         
@@ -54,7 +156,40 @@
         completion(nil, array);
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        completion(error, nil);
+        if (error.code == -1009) //network down
+        {
+            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+            
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            [fetchRequest setEntity:[NSEntityDescription entityForName:@"Encounter" inManagedObjectContext:appDelegate.managedObjectContext]];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(patient == %@)", patient.UUID];
+            [fetchRequest setPredicate:predicate];
+            
+            NSError *error;
+            NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+            
+            if (error)
+            {
+                NSLog(@"error: %@", error);
+            }
+            
+            if (results.count > 0)
+            {
+                NSMutableArray *encounters = [[NSMutableArray alloc] init];
+                for (NSManagedObject *object in results) {
+                    MRSEncounter *encounter = [[MRSEncounter alloc] init];
+                    encounter.UUID = [object valueForKey:@"uuid"];
+                    encounter.displayName = [object valueForKey:@"displayName"];
+                    [encounters addObject:encounter];
+                }
+                completion(nil, encounters);
+            }
+        }
+        else
+        {
+            completion(error, nil);
+        }
         NSLog(@"Failure, %@", error);
     }];
 }
@@ -82,7 +217,40 @@
         completion(nil, array);
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        completion(error, nil);
+        if (error.code == -1009) //network down
+        {
+            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+            
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            [fetchRequest setEntity:[NSEntityDescription entityForName:@"Visit" inManagedObjectContext:appDelegate.managedObjectContext]];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(patient == %@)", patient.UUID];
+            [fetchRequest setPredicate:predicate];
+            
+            NSError *error;
+            NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+            
+            if (error)
+            {
+                NSLog(@"error: %@", error);
+            }
+            
+            if (results.count > 0)
+            {
+                NSMutableArray *visits = [[NSMutableArray alloc] init];
+                for (NSManagedObject *object in results) {
+                    MRSVisit *visit = [[MRSVisit alloc] init];
+                    visit.UUID = [object valueForKey:@"uuid"];
+                    visit.displayName = [object valueForKey:@"displayName"];
+                    [visits addObject:visit];
+                }
+                completion(nil, visits);
+            }
+        }
+        else
+        {
+            completion(error, nil);
+        }
         NSLog(@"Failure, %@", error);
     }];
 }
@@ -122,7 +290,38 @@
         {
             [OpenMRSAPIManager presentLoginController];
         }
-        completion(error, nil);
+        else
+        {
+            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+            
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            [fetchRequest setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:appDelegate.managedObjectContext]];
+            
+            if (search.length != 0)
+            {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(name CONTAINS[cd] %@) OR (display CONTAINS[cd] %@) OR (display CONTAINS[cd] %@)", search, search, search];
+                [fetchRequest setPredicate:predicate];
+            }
+            
+            NSError *error;
+            NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+            
+            if (results.count > 0)
+            {
+                NSMutableArray *patients = [[NSMutableArray alloc] init];
+                for (NSManagedObject *object in results) {
+                    MRSPatient *patient = [[MRSPatient alloc] init];
+                    patient.UUID = [object valueForKey:@"uuid"];
+                    [patient updateFromCoreData];
+                    [patients addObject:patient];
+                }
+                completion(nil, patients);
+            }
+            else
+            {
+                completion(error, nil);
+            }
+        }
     }];
 }
 + (void)getDetailedDataOnPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, MRSPatient *detailedPatient))completion
@@ -175,7 +374,17 @@
         {
             [OpenMRSAPIManager presentLoginController];
         }
-        completion(error, nil);
+        
+        if ([patient isInCoreData])
+        {
+            [patient updateFromCoreData];
+            patient.hasDetailedInfo = YES;
+            completion(nil, patient);
+        }
+        else
+        {
+            completion(error, nil);
+        }
     }];
 }
 + (void)presentLoginController
