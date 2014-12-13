@@ -10,6 +10,9 @@
 #import "OpenMRSAPIManager.h"
 #import "PatientEncounterListView.h"
 #import "PatientVisitListView.h"
+#import "AddVisitNoteTableViewController.h"
+#import "CaptureVitalsTableViewController.h"
+
 @implementation PatientViewController
 -(void)setPatient:(MRSPatient *)patient
 {
@@ -60,6 +63,11 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 2)
+    {
+        return 44;
+    }
+    
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
     NSString *detail = cell.detailTextLabel.text;
     
@@ -147,21 +155,59 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0)
+    if (section == 2)
+    {
+        return 2;
+    }
+    else if (section == 0)
     {
         return self.information.count;
     }
-    else // section == 1
+    else if (section == 1)
     {
         return 2;
+    }
+    else
+    {
+        return 1;
     }
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 2)
+    {
+        if (indexPath.row == 0)
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"addVisitNoteCell"];
+            
+            if (!cell)
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"addVisitNoteCell"];
+            }
+            
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.textColor = self.view.tintColor;
+            cell.textLabel.text = @"Add Visit Note...";
+            
+            return cell;
+        }
+        UITableViewCell *actionCell = [tableView dequeueReusableCellWithIdentifier:@"actionCell"];
+        
+        if (!actionCell)
+        {
+            actionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
+        }
+        
+        actionCell.textLabel.text = @"Capture Vitals...";
+        actionCell.textLabel.textAlignment = NSTextAlignmentCenter;
+        actionCell.textLabel.textColor = self.view.tintColor;
+        
+        return actionCell;
+    }
     if (indexPath.section == 1)
     {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"countCell"];
@@ -208,7 +254,25 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1)
+    if (indexPath.section == 2)
+    {
+        if (indexPath.row == 0)
+        {
+            AddVisitNoteTableViewController *addVisitNote = [[AddVisitNoteTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            addVisitNote.delegate = self;
+            addVisitNote.patient = self.patient;
+            addVisitNote.delegate = self;
+            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:addVisitNote] animated:YES completion:nil];
+        }
+        else if (indexPath.row == 1)
+        {
+            CaptureVitalsTableViewController *vitals = [[CaptureVitalsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            vitals.patient = self.patient;
+            vitals.delegate = self;
+            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vitals] animated:YES completion:nil];
+        }
+    }
+    else if (indexPath.section == 1)
     {
         if (indexPath.row == 1) //encounters row selected
         {
@@ -223,5 +287,20 @@
             [self.navigationController pushViewController:visitsList animated:YES];
         }
     }
+}
+- (void)didAddVisitNoteToPatient:(MRSPatient *)patient
+{
+    if ([patient.UUID isEqualToString:self.patient.UUID])
+    {
+        [self updateWithDetailedInfo];
+    }
+}
+- (void)didCaptureVitalsForPatient:(MRSPatient *)patient
+{
+    if ([patient.UUID isEqualToString:self.patient.UUID])
+    {
+        [self updateWithDetailedInfo];
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end
