@@ -7,15 +7,12 @@
 
 #import "AppDelegate.h"
 #import "SignInViewController.h"
-<<<<<<< HEAD
 #import "KeychainItemWrapper.h"
-#import "LandingPageViewController.h"
-=======
 #import "MainMenuCollectionViewController.h"
 #import "KeychainItemWrapper.h"
 #import <CoreData/CoreData.h>
 #import "EncryptedStore.h"
->>>>>>> upstream/master
+
 @interface AppDelegate ()
 
 @end
@@ -30,14 +27,10 @@
     
 //    [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] resetKeychainItem];
     
-<<<<<<< HEAD
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.theme = [[MRSTheme alloc] init];
     
-    LandingPageViewController *menu = [[LandingPageViewController alloc] init];
-=======
     MainMenuCollectionViewController *menu = [[MainMenuCollectionViewController alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
->>>>>>> upstream/master
     
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:menu];
     
@@ -160,11 +153,8 @@
     [storeCoordinator removePersistentStore:store error:&error];
     [[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error];
 }
-<<<<<<< HEAD
 
 +(AppDelegate*) instance {
     return (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
-=======
->>>>>>> upstream/master
 @end

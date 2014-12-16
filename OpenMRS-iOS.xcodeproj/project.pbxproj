@@ -543,7 +543,6 @@
 				D396A5471A2E396300DE6448 /* MRSVisit.m in Sources */,
 				D8FF488A1A36127E00976150 /* UIButton+Extensions.m in Sources */,
 				D8FF48851A36078600976150 /* LandingPageViewController.m in Sources */,
-				D396A52E1A2E09DE00DE6448 /* CredentialsLayer.m in Sources */,
 				D8FF488D1A361F4E00976150 /* MRSTheme.m in Sources */,
 				D3A4728B1A3770B4002A0BBD /* AddPatientTableViewController.m in Sources */,
 				D396A52E1A2E09DE00DE6448 /* CredentialsLayer.m in Sources */,

@@ -79,19 +79,6 @@
        }
     }];
 }
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == 0)
-    {
-        return 44;
-    }
-    
-    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
-    NSString *detail = cell.detailTextLabel.text;
-    
-    CGRect bounding = [detail boundingRectWithSize:CGSizeMake(self.view.frame.size.width, 1000) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : cell.detailTextLabel.font} context:nil];
-    return MAX(44,bounding.size.height+10);
-}
 -(id)notNil:(id)thing
 {
     if (thing == nil || thing == [NSNull null])
@@ -197,6 +184,11 @@
 #pragma mark - UITableViewController methods
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 0)
+    {
+        return 44;
+    }
+    
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
     NSString *detail = cell.detailTextLabel.text;
     
@@ -383,46 +375,6 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1 && indexPath.row == 0) {
-        BOOL expanded = self.vitalSignsExpanded;
-        
-        self.vitalSignsExpanded = !self.vitalSignsExpanded;
-
-        [self.tableView beginUpdates];
-//        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        
-        NSUInteger count = [self numberOfVitalSignsRowsExcludingHeader];
-        NSMutableArray* paths = [[NSMutableArray alloc] init];
-        for (int i = 1; i <= count; i++) {
-            [paths addObject:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
-        }
-
-        
-        if (expanded) {
-            [tableView deleteRowsAtIndexPaths:paths
-                             withRowAnimation:UITableViewRowAnimationTop];
-        } else {
-            [tableView insertRowsAtIndexPaths:paths
-                             withRowAnimation:UITableViewRowAnimationTop];
-        }
-        [self.tableView endUpdates];
-        
-        [self performSelector:@selector(toggleOpenIndicator:) withObject:indexPath afterDelay:0.3];
-        
-    } else if (indexPath.section == 2) {
-    
-    NSString *key = ((NSDictionary *)self.information[indexPath.row]).allKeys[0];
-    NSString *value = [self.information[indexPath.row] valueForKey:key];
-    
-    cell.textLabel.text = key;
-    cell.detailTextLabel.text = value;
-    cell.detailTextLabel.numberOfLines = 0;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    return cell;
-}
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
     if (indexPath.section == 0)
     {
         if (!self.isShowingActions)
@@ -452,6 +404,34 @@
             vitals.delegate = self;
             [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vitals] animated:YES completion:nil];
         }
+    }
+    else if (indexPath.section == 1 && indexPath.row == 0)
+    {
+        BOOL expanded = self.vitalSignsExpanded;
+        
+        self.vitalSignsExpanded = !self.vitalSignsExpanded;
+        
+        [self.tableView beginUpdates];
+        //        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        
+        NSUInteger count = [self numberOfVitalSignsRowsExcludingHeader];
+        NSMutableArray* paths = [[NSMutableArray alloc] init];
+        for (int i = 1; i <= count; i++) {
+            [paths addObject:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
+        }
+        
+        
+        if (expanded) {
+            [tableView deleteRowsAtIndexPaths:paths
+                             withRowAnimation:UITableViewRowAnimationTop];
+        } else {
+            [tableView insertRowsAtIndexPaths:paths
+                             withRowAnimation:UITableViewRowAnimationTop];
+        }
+        [self.tableView endUpdates];
+        
+        [self performSelector:@selector(toggleOpenIndicator:) withObject:indexPath afterDelay:0.3];
+        
     }
     else if (indexPath.section == 2)
     {

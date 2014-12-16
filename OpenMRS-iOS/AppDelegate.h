@@ -12,15 +12,12 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-<<<<<<< HEAD
 @property (strong, nonatomic) MRSTheme* theme;
 
 +(AppDelegate*) instance;
-=======
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
->>>>>>> upstream/master
 @property (nonatomic, strong) AFHTTPRequestOperation *currentSearchOperation;
 
 - (void)saveContext;
