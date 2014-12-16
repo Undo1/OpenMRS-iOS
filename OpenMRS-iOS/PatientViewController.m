@@ -12,6 +12,8 @@
 #import "PatientVisitListView.h"
 #import "MRSObservation.h"
 #import "MRSVitalSigns.h"
+#import "AddVisitNoteTableViewController.h"
+#import "CaptureVitalsTableViewController.h"
 
 @implementation PatientViewController
 -(void)setPatient:(MRSPatient *)patient
@@ -21,10 +23,12 @@
     self.information = @[@{@"Name" : patient.name}];
     
     [self.tableView reloadData];
-    if (!patient.hasDetailedInfo)
-    {
-        [self updateWithDetailedInfo];
-    }
+}
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self updateWithDetailedInfo];
 }
 -(void)updateWithDetailedInfo
 {
@@ -36,6 +40,9 @@
                                  @{@"Age" : [self notNil:self.patient.age]},
                                  @{@"Gender" : [self notNil:self.patient.gender]},
                                  @{@"Address" : [self formatPatientAdress:self.patient]}];
+            
+            [self.patient isInCoreData];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
                 self.title = self.patient.name;
@@ -72,7 +79,19 @@
        }
     }];
 }
-
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0)
+    {
+        return 44;
+    }
+    
+    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    NSString *detail = cell.detailTextLabel.text;
+    
+    CGRect bounding = [detail boundingRectWithSize:CGSizeMake(self.view.frame.size.width, 1000) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : cell.detailTextLabel.font} context:nil];
+    return MAX(44,bounding.size.height+10);
+}
 -(id)notNil:(id)thing
 {
     if (thing == nil || thing == [NSNull null])
@@ -192,19 +211,90 @@
 {
     if (section == 0)
     {
-        return self.information.count;
+        return (self.isShowingActions) ? 3 : 1;
     }
     else if (section == 1)
     {
         return self.vitalSignsExpanded ? [self numberOfVitalSignsRowsExcludingHeader] + 1 : 1;
     }
-    else // section == 2
+    else if (section == 2)
     {
         return 2;
+    }
+    else
+    {
+        return 1;
     }
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 0)
+    {
+        if (!self.isShowingActions)
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"showActions"];
+            
+            if (!cell)
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"showActions"];
+            }
+            
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.text = @"Actions...";
+            cell.textLabel.textColor = self.view.tintColor;
+            
+            return cell;
+        }
+        if (indexPath.row == 2)
+        {
+            UITableViewCell *saveToCoreDataCell = [tableView dequeueReusableCellWithIdentifier:@"coredata"];
+            if (!saveToCoreDataCell)
+            {
+                saveToCoreDataCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"coredata"];
+            }
+            
+            if (self.patient.isInCoreData)
+            {
+                saveToCoreDataCell.textLabel.text = @"Update Offline Record";
+            }
+            else
+            {
+                saveToCoreDataCell.textLabel.text = @"Save for Offline Use";
+            }
+            saveToCoreDataCell.textLabel.textAlignment = NSTextAlignmentCenter;
+            saveToCoreDataCell.textLabel.textColor = self.view.tintColor;
+            
+            return saveToCoreDataCell;
+        }
+
+        if (indexPath.row == 0)
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"addVisitNoteCell"];
+            
+            if (!cell)
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"addVisitNoteCell"];
+            }
+            
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.textColor = self.view.tintColor;
+            cell.textLabel.text = @"Add Visit Note...";
+            
+            return cell;
+        }
+        UITableViewCell *actionCell = [tableView dequeueReusableCellWithIdentifier:@"actionCell"];
+        
+        if (!actionCell)
+        {
+            actionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
+        }
+        
+        actionCell.textLabel.text = @"Capture Vitals...";
+        actionCell.textLabel.textAlignment = NSTextAlignmentCenter;
+        actionCell.textLabel.textColor = self.view.tintColor;
+        
+        return actionCell;
+    }
     if (indexPath.section == 2)
     {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"countCell"];
@@ -320,6 +410,51 @@
         [self performSelector:@selector(toggleOpenIndicator:) withObject:indexPath afterDelay:0.3];
         
     } else if (indexPath.section == 2) {
+    
+    NSString *key = ((NSDictionary *)self.information[indexPath.row]).allKeys[0];
+    NSString *value = [self.information[indexPath.row] valueForKey:key];
+    
+    cell.textLabel.text = key;
+    cell.detailTextLabel.text = value;
+    cell.detailTextLabel.numberOfLines = 0;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    return cell;
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0)
+    {
+        if (!self.isShowingActions)
+        {
+            self.isShowingActions = YES;
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+            return;
+        }
+        if (indexPath.row == 2)
+        {
+            [self.patient saveToCoreData];
+            return;
+        }
+        
+        if (indexPath.row == 0)
+        {
+            AddVisitNoteTableViewController *addVisitNote = [[AddVisitNoteTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            addVisitNote.delegate = self;
+            addVisitNote.patient = self.patient;
+            addVisitNote.delegate = self;
+            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:addVisitNote] animated:YES completion:nil];
+        }
+        else if (indexPath.row == 1)
+        {
+            CaptureVitalsTableViewController *vitals = [[CaptureVitalsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            vitals.patient = self.patient;
+            vitals.delegate = self;
+            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vitals] animated:YES completion:nil];
+        }
+    }
+    else if (indexPath.section == 2)
+    {
         if (indexPath.row == 1) //encounters row selected
         {
             PatientEncounterListView *encounterList = [[PatientEncounterListView alloc] initWithStyle:UITableViewStyleGrouped];
@@ -339,6 +474,21 @@
     [self.tableView beginUpdates];
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView endUpdates];
+}
     
+- (void)didAddVisitNoteToPatient:(MRSPatient *)patient
+{
+    if ([patient.UUID isEqualToString:self.patient.UUID])
+    {
+        [self updateWithDetailedInfo];
+    }
+}
+- (void)didCaptureVitalsForPatient:(MRSPatient *)patient
+{
+    if ([patient.UUID isEqualToString:self.patient.UUID])
+    {
+        [self updateWithDetailedInfo];
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end
