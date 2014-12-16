@@ -197,7 +197,7 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 4;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -207,9 +207,13 @@
     }
     else if (section == 1)
     {
-        return self.vitalSignsExpanded ? [self numberOfVitalSignsRowsExcludingHeader] + 1 : 1;
+        return self.information.count;
     }
     else if (section == 2)
+    {
+        return self.vitalSignsExpanded ? [self numberOfVitalSignsRowsExcludingHeader] + 1 : 1;
+    }
+    else if (section == 3)
     {
         return 2;
     }
@@ -287,7 +291,7 @@
         
         return actionCell;
     }
-    if (indexPath.section == 2)
+    if (indexPath.section == 3)
     {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"countCell"];
         
@@ -311,7 +315,7 @@
             
         }
         return cell;
-    } else if (indexPath.section == 1 && indexPath.row == 0) {
+    } else if (indexPath.section == 2 && indexPath.row == 0) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"vitalHeaderCell"];
         if (!cell)
         {
@@ -326,7 +330,7 @@
         }
         
         return cell;
-    } else if (indexPath.section == 1) {
+    } else if (indexPath.section == 2) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"vitalSignCell"];
         if (!cell)
         {
@@ -405,7 +409,7 @@
             [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vitals] animated:YES completion:nil];
         }
     }
-    else if (indexPath.section == 1 && indexPath.row == 0)
+    else if (indexPath.section == 2 && indexPath.row == 0)
     {
         BOOL expanded = self.vitalSignsExpanded;
         
@@ -433,7 +437,7 @@
         [self performSelector:@selector(toggleOpenIndicator:) withObject:indexPath afterDelay:0.3];
         
     }
-    else if (indexPath.section == 2)
+    else if (indexPath.section == 3)
     {
         if (indexPath.row == 1) //encounters row selected
         {
