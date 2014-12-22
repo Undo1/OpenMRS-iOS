@@ -10,6 +10,8 @@
 #import "OpenMRSAPIManager.h"
 #import "PatientEncounterListView.h"
 #import "PatientVisitListView.h"
+#import "MRSObservation.h"
+#import "MRSVitalSigns.h"
 #import "AddVisitNoteTableViewController.h"
 #import "CaptureVitalsTableViewController.h"
 
@@ -47,6 +49,17 @@
             });
         }
     }];
+    [OpenMRSAPIManager getVitalsForPatient:self.patient completion:^(NSError *error, NSArray *vitalSigns) {
+        NSLog(@"Vital signs request completed. %@", (error ? @"Error encountered" : @""));
+        if (error == nil) {
+            self.vitalSigns = vitalSigns;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+        } else {
+            self.vitalSignsError = YES;
+        }
+    }];
     [OpenMRSAPIManager getEncountersForPatient:self.patient completion:^(NSError *error, NSArray *encounters) {
         if (error == nil)
         {
@@ -65,19 +78,6 @@
            });
        }
     }];
-}
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == 0)
-    {
-        return 44;
-    }
-    
-    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
-    NSString *detail = cell.detailTextLabel.text;
-    
-    CGRect bounding = [detail boundingRectWithSize:CGSizeMake(self.view.frame.size.width, 1000) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : cell.detailTextLabel.font} context:nil];
-    return MAX(44,bounding.size.height+10);
 }
 -(id)notNil:(id)thing
 {
@@ -158,9 +158,46 @@
         return string;
     }
 }
+
+#pragma mark - Vital-signs-related methods
+-(NSUInteger) numberOfVitalSignsRowsExcludingHeader {
+    if ([self isVitalSignsAvailable]) {
+        NSUInteger result = [self latestVitalSigns].observations.count;
+        if (self.vitalSigns.count > 1) {
+            result++;
+        }
+        return result;
+    } else {
+        return 1;
+    }
+}
+-(MRSVitalSigns*) latestVitalSigns {
+    return [self isVitalSignsAvailable] ? [self.vitalSigns objectAtIndex:0] : nil;
+}
+-(BOOL) isVitalSignsLoaded {
+    return self.vitalSigns != nil;
+}
+-(BOOL) isVitalSignsAvailable {
+    return self.vitalSigns.count > 0;
+}
+
+#pragma mark - UITableViewController methods
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0)
+    {
+        return 44;
+    }
+    
+    UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    NSString *detail = cell.detailTextLabel.text;
+    
+    CGRect bounding = [detail boundingRectWithSize:CGSizeMake(self.view.frame.size.width, 1000) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName : cell.detailTextLabel.font} context:nil];
+    return MAX(44,bounding.size.height+10);
+}
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 4;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -173,6 +210,10 @@
         return self.information.count;
     }
     else if (section == 2)
+    {
+        return self.vitalSignsExpanded ? [self numberOfVitalSignsRowsExcludingHeader] + 1 : 1;
+    }
+    else if (section == 3)
     {
         return 2;
     }
@@ -250,7 +291,7 @@
         
         return actionCell;
     }
-    if (indexPath.section == 2)
+    if (indexPath.section == 3)
     {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"countCell"];
         
@@ -264,34 +305,77 @@
         {
             cell.textLabel.text = @"Visits";
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.visits.count];
+            cell.imageView.image = [UIImage imageNamed:@"openmrs_icon_visit.png"];
             
-            return cell;
         }
         else if (indexPath.row == 1)
         {
             cell.textLabel.text = @"Encounters";
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.encounters.count];
             
-            return cell;
         }
+        return cell;
+    } else if (indexPath.section == 2 && indexPath.row == 0) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"vitalHeaderCell"];
+        if (!cell)
+        {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"vitalHeaderCell"];
+        }
+
+        cell.textLabel.text = @"Vital Signs";
+        cell.imageView.image = [UIImage imageNamed:self.vitalSignsExpanded ?  @"openmrs_icon_caretdown.png" :  @"openmrs_icon_caretright.png"];
+        
+        if ([self isVitalSignsAvailable]) {
+            cell.detailTextLabel.text = [self latestVitalSigns].formattedEncounterDatetime;
+        }
+        
+        return cell;
+    } else if (indexPath.section == 2) {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"vitalSignCell"];
+        if (!cell)
+        {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"vitalSignCell"];
+        }
+
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        if (!self.isViewLoaded) {
+            cell.textLabel.text = @"Loading...";
+            cell.detailTextLabel.text = nil;
+        } else if (![self isVitalSignsAvailable]) {
+            cell.textLabel.text = @"No vital signs recorded";
+            cell.detailTextLabel.text = nil;
+        } else if (indexPath.row == 1) {
+            cell.textLabel.text = @"Date:";
+            cell.detailTextLabel.text = [self latestVitalSigns].formattedFullEncounterDatetime;
+        } else if (indexPath.row-1 < [self latestVitalSigns].observations.count) {
+            MRSObservation* observation = [[self latestVitalSigns].observations objectAtIndex:(indexPath.row-1)];
+            cell.textLabel.text = observation.conceptDisplayName;
+            cell.detailTextLabel.text = [observation.value stringValue];
+        } else {
+            cell.textLabel.text = @"More...";
+            cell.detailTextLabel.text = nil;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        return cell;
+    } else {
+    
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+        
+        if (!cell)
+        {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+        }
+        
+        NSString *key = ((NSDictionary *)self.information[indexPath.row]).allKeys[0];
+        NSString *value = [self.information[indexPath.row] valueForKey:key];
+        
+        cell.textLabel.text = key;
+        cell.detailTextLabel.text = value;
+        cell.detailTextLabel.numberOfLines = 0;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        return cell;
     }
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    
-    if (!cell)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
-    }
-    
-    NSString *key = ((NSDictionary *)self.information[indexPath.row]).allKeys[0];
-    NSString *value = [self.information[indexPath.row] valueForKey:key];
-    
-    cell.textLabel.text = key;
-    cell.detailTextLabel.text = value;
-    cell.detailTextLabel.numberOfLines = 0;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
-    return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -325,7 +409,35 @@
             [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vitals] animated:YES completion:nil];
         }
     }
-    else if (indexPath.section == 2)
+    else if (indexPath.section == 2 && indexPath.row == 0)
+    {
+        BOOL expanded = self.vitalSignsExpanded;
+        
+        self.vitalSignsExpanded = !self.vitalSignsExpanded;
+        
+        [self.tableView beginUpdates];
+        //        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        
+        NSUInteger count = [self numberOfVitalSignsRowsExcludingHeader];
+        NSMutableArray* paths = [[NSMutableArray alloc] init];
+        for (int i = 1; i <= count; i++) {
+            [paths addObject:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
+        }
+        
+        
+        if (expanded) {
+            [tableView deleteRowsAtIndexPaths:paths
+                             withRowAnimation:UITableViewRowAnimationTop];
+        } else {
+            [tableView insertRowsAtIndexPaths:paths
+                             withRowAnimation:UITableViewRowAnimationTop];
+        }
+        [self.tableView endUpdates];
+        
+        [self performSelector:@selector(toggleOpenIndicator:) withObject:indexPath afterDelay:0.3];
+        
+    }
+    else if (indexPath.section == 3)
     {
         if (indexPath.row == 1) //encounters row selected
         {
@@ -341,6 +453,13 @@
         }
     }
 }
+
+-(void) toggleOpenIndicator:(NSIndexPath*) indexPath {
+    [self.tableView beginUpdates];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
+}
+    
 - (void)didAddVisitNoteToPatient:(MRSPatient *)patient
 {
     if ([patient.UUID isEqualToString:self.patient.UUID])

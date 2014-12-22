@@ -25,4 +25,5 @@
 + (void)captureVitals:(NSArray *)vitals toPatient:(MRSPatient *)patient atLocation:(MRSLocation *)location completion:(void (^)(NSError *error))completion;
 + (void)getLocationsWithCompletion:(void (^)(NSError *error, NSArray *locations))completion;
 + (void)logout;
++ (void)getVitalsForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *vitals))completion;
 @end

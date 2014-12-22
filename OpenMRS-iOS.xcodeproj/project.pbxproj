@@ -51,6 +51,18 @@
 		D3E47BA31A3A00C0004B3F95 /* MRSPatientIdentifierType.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA21A3A00C0004B3F95 /* MRSPatientIdentifierType.m */; };
 		D3E47BA61A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */; };
 		D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */; };
+		D8FF487B1A32454300976150 /* openmrs_icon_visit.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF48791A32454300976150 /* openmrs_icon_visit.png */; };
+		D8FF487C1A32454300976150 /* openmrs_icon_visit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF487A1A32454300976150 /* openmrs_icon_visit@2x.png */; };
+		D8FF487F1A3249F900976150 /* openmrs_icon_search.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF487D1A3249F900976150 /* openmrs_icon_search.png */; };
+		D8FF48801A3249F900976150 /* openmrs_icon_search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF487E1A3249F900976150 /* openmrs_icon_search@2x.png */; };
+		D8FF488A1A36127E00976150 /* UIButton+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FF48891A36127E00976150 /* UIButton+Extensions.m */; };
+		D8FF488D1A361F4E00976150 /* MRSTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FF488C1A361F4E00976150 /* MRSTheme.m */; };
+		D8FF48901A36600300976150 /* MRSVitalSigns.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FF488F1A36600300976150 /* MRSVitalSigns.m */; };
+		D8FF48931A37570000976150 /* MRSObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FF48921A37570000976150 /* MRSObservation.m */; };
+		D8FF48981A376D9A00976150 /* openmrs_icon_caretright.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF48941A376D9A00976150 /* openmrs_icon_caretright.png */; };
+		D8FF48991A376D9A00976150 /* openmrs_icon_caretright@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF48951A376D9A00976150 /* openmrs_icon_caretright@2x.png */; };
+		D8FF489A1A376D9A00976150 /* openmrs_icon_caretdown.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF48961A376D9A00976150 /* openmrs_icon_caretdown.png */; };
+		D8FF489B1A376D9A00976150 /* openmrs_icon_caretdown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D8FF48971A376D9A00976150 /* openmrs_icon_caretdown@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,6 +155,22 @@
 		D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectPatientIdentifierTypeTableViewController.m; sourceTree = "<group>"; };
 		D3E47BA71A3A08EF004B3F95 /* MRSPatientIdentifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSPatientIdentifier.h; sourceTree = "<group>"; };
 		D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSPatientIdentifier.m; sourceTree = "<group>"; };
+		D8FF48791A32454300976150 /* openmrs_icon_visit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = openmrs_icon_visit.png; path = icons/openmrs_icon_visit.png; sourceTree = "<group>"; };
+		D8FF487A1A32454300976150 /* openmrs_icon_visit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "openmrs_icon_visit@2x.png"; path = "icons/openmrs_icon_visit@2x.png"; sourceTree = "<group>"; };
+		D8FF487D1A3249F900976150 /* openmrs_icon_search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = openmrs_icon_search.png; path = icons/openmrs_icon_search.png; sourceTree = "<group>"; };
+		D8FF487E1A3249F900976150 /* openmrs_icon_search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "openmrs_icon_search@2x.png"; path = "icons/openmrs_icon_search@2x.png"; sourceTree = "<group>"; };
+		D8FF48881A36127E00976150 /* UIButton+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Extensions.h"; sourceTree = "<group>"; };
+		D8FF48891A36127E00976150 /* UIButton+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Extensions.m"; sourceTree = "<group>"; };
+		D8FF488B1A361F4E00976150 /* MRSTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSTheme.h; sourceTree = "<group>"; };
+		D8FF488C1A361F4E00976150 /* MRSTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSTheme.m; sourceTree = "<group>"; };
+		D8FF488E1A36600300976150 /* MRSVitalSigns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSVitalSigns.h; sourceTree = "<group>"; };
+		D8FF488F1A36600300976150 /* MRSVitalSigns.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSVitalSigns.m; sourceTree = "<group>"; };
+		D8FF48911A37570000976150 /* MRSObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSObservation.h; sourceTree = "<group>"; };
+		D8FF48921A37570000976150 /* MRSObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSObservation.m; sourceTree = "<group>"; };
+		D8FF48941A376D9A00976150 /* openmrs_icon_caretright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = openmrs_icon_caretright.png; path = icons/openmrs_icon_caretright.png; sourceTree = "<group>"; };
+		D8FF48951A376D9A00976150 /* openmrs_icon_caretright@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "openmrs_icon_caretright@2x.png"; path = "icons/openmrs_icon_caretright@2x.png"; sourceTree = "<group>"; };
+		D8FF48961A376D9A00976150 /* openmrs_icon_caretdown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = openmrs_icon_caretdown.png; path = icons/openmrs_icon_caretdown.png; sourceTree = "<group>"; };
+		D8FF48971A376D9A00976150 /* openmrs_icon_caretdown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "openmrs_icon_caretdown@2x.png"; path = "icons/openmrs_icon_caretdown@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +225,8 @@
 		D397396D1A2E082200D0AB69 /* OpenMRS-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				D8FF48871A36126000976150 /* Extensions */,
+				D8FF48811A32704A00976150 /* Model */,
 				D3A869521A32B42A00D1963F /* openmrs-offline.xcdatamodeld */,
 				D396A5121A2E09DE00DE6448 /* PatientViewController.h */,
 				D396A5131A2E09DE00DE6448 /* PatientViewController.m */,
@@ -208,6 +238,8 @@
 				D396A54F1A2E3F7600DE6448 /* PatientVisitListView.m */,
 				D396A54B1A2E3E5600DE6448 /* PatientEncounterListView.h */,
 				D396A54C1A2E3E5600DE6448 /* PatientEncounterListView.m */,
+				D8FF488B1A361F4E00976150 /* MRSTheme.h */,
+				D8FF488C1A361F4E00976150 /* MRSTheme.m */,
 				D396A5141A2E09DE00DE6448 /* AppDelegate.h */,
 				D396A5151A2E09DE00DE6448 /* AppDelegate.m */,
 				D396A5161A2E09DE00DE6448 /* SignInViewController.h */,
@@ -248,10 +280,6 @@
 				D396A5431A2E0CEF00DE6448 /* SettingsViewController.m */,
 				D396A51E1A2E09DE00DE6448 /* PatientSearchViewController.h */,
 				D396A51F1A2E09DE00DE6448 /* PatientSearchViewController.m */,
-				D396A5201A2E09DE00DE6448 /* MRSPatient.h */,
-				D396A5211A2E09DE00DE6448 /* MRSPatient.m */,
-				D396A5451A2E396300DE6448 /* MRSVisit.h */,
-				D396A5461A2E396300DE6448 /* MRSVisit.m */,
 				D396A5221A2E09DE00DE6448 /* CredentialsLayer.h */,
 				D396A5231A2E09DE00DE6448 /* CredentialsLayer.m */,
 				D396A5241A2E09DE00DE6448 /* ViewController.h */,
@@ -265,6 +293,7 @@
 		D397396E1A2E082200D0AB69 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D8FF48781A32452E00976150 /* icons */,
 				D396EAF21A36460500191F50 /* search_icon.png */,
 				D396EAF31A36460500191F50 /* search_icon@2x.png */,
 				D396EAF41A36460500191F50 /* search_icon@3x.png */,
@@ -295,6 +324,45 @@
 				D39739891A2E082300D0AB69 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D8FF48781A32452E00976150 /* icons */ = {
+			isa = PBXGroup;
+			children = (
+				D8FF48941A376D9A00976150 /* openmrs_icon_caretright.png */,
+				D8FF48951A376D9A00976150 /* openmrs_icon_caretright@2x.png */,
+				D8FF48961A376D9A00976150 /* openmrs_icon_caretdown.png */,
+				D8FF48971A376D9A00976150 /* openmrs_icon_caretdown@2x.png */,
+				D8FF487D1A3249F900976150 /* openmrs_icon_search.png */,
+				D8FF487E1A3249F900976150 /* openmrs_icon_search@2x.png */,
+				D8FF48791A32454300976150 /* openmrs_icon_visit.png */,
+				D8FF487A1A32454300976150 /* openmrs_icon_visit@2x.png */,
+			);
+			name = icons;
+			sourceTree = "<group>";
+		};
+		D8FF48811A32704A00976150 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D8FF48911A37570000976150 /* MRSObservation.h */,
+				D8FF48921A37570000976150 /* MRSObservation.m */,
+				D396A5201A2E09DE00DE6448 /* MRSPatient.h */,
+				D396A5211A2E09DE00DE6448 /* MRSPatient.m */,
+				D396A5451A2E396300DE6448 /* MRSVisit.h */,
+				D396A5461A2E396300DE6448 /* MRSVisit.m */,
+				D8FF488E1A36600300976150 /* MRSVitalSigns.h */,
+				D8FF488F1A36600300976150 /* MRSVitalSigns.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		D8FF48871A36126000976150 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D8FF48881A36127E00976150 /* UIButton+Extensions.h */,
+				D8FF48891A36127E00976150 /* UIButton+Extensions.m */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 		E54315529FE081E009C0AF4D /* Pods */ = {
@@ -388,16 +456,24 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8FF487B1A32454300976150 /* openmrs_icon_visit.png in Resources */,
+				D8FF489A1A376D9A00976150 /* openmrs_icon_caretdown.png in Resources */,
+				D8FF489B1A376D9A00976150 /* openmrs_icon_caretdown@2x.png in Resources */,
+				D8FF48801A3249F900976150 /* openmrs_icon_search@2x.png in Resources */,
+				D8FF487F1A3249F900976150 /* openmrs_icon_search.png in Resources */,
 				D396EAF51A36460500191F50 /* search_icon.png in Resources */,
 				D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */,
 				D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */,
 				D396EAF61A36460500191F50 /* search_icon@2x.png in Resources */,
 				D356E94A1A3F5B810014C82C /* catalog.xcassets in Resources */,
 				D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */,
+				D8FF48981A376D9A00976150 /* openmrs_icon_caretright.png in Resources */,
 				D396A5401A2E0B5A00DE6448 /* openmrs-logo@3x.png in Resources */,
+				D8FF487C1A32454300976150 /* openmrs_icon_visit@2x.png in Resources */,
 				D3079E771A3D4DED00E308C7 /* add_patient_icon@3x.png in Resources */,
 				D396EAF71A36460500191F50 /* search_icon@3x.png in Resources */,
 				D396A5411A2E0B5A00DE6448 /* openmrs-logo.png in Resources */,
+				D8FF48991A376D9A00976150 /* openmrs_icon_caretright@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,7 +524,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8FF48901A36600300976150 /* MRSVitalSigns.m in Sources */,
 				D396A5471A2E396300DE6448 /* MRSVisit.m in Sources */,
+				D8FF488A1A36127E00976150 /* UIButton+Extensions.m in Sources */,
+				D8FF488D1A361F4E00976150 /* MRSTheme.m in Sources */,
 				D3A4728B1A3770B4002A0BBD /* AddPatientTableViewController.m in Sources */,
 				D396A52E1A2E09DE00DE6448 /* CredentialsLayer.m in Sources */,
 				D3A869541A32B42A00D1963F /* openmrs-offline.xcdatamodeld in Sources */,
@@ -460,6 +539,7 @@
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
 				D39AD7AB1A3BFE8600C01540 /* CaptureVitalsTableViewController.m in Sources */,
 				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
+				D8FF48931A37570000976150 /* MRSObservation.m in Sources */,
 				D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */,
 				D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */,
 				D396A5261A2E09DE00DE6448 /* PatientViewController.m in Sources */,

@@ -16,5 +16,9 @@
 @property (nonatomic, strong) NSArray *information;
 @property (nonatomic, strong) NSArray *visits;
 @property (nonatomic, strong) NSArray *encounters;
+
+@property (nonatomic, strong) NSArray* vitalSigns;
+@property (nonatomic) BOOL vitalSignsExpanded;
+@property (nonatomic) BOOL vitalSignsError;
 @property (nonatomic) BOOL isShowingActions;
 @end

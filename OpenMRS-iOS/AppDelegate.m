@@ -7,10 +7,12 @@
 
 #import "AppDelegate.h"
 #import "SignInViewController.h"
+#import "KeychainItemWrapper.h"
 #import "MainMenuCollectionViewController.h"
 #import "KeychainItemWrapper.h"
 #import <CoreData/CoreData.h>
 #import "EncryptedStore.h"
+
 @interface AppDelegate ()
 
 @end
@@ -24,6 +26,9 @@
 // SignInViewController *vc = [[SignInViewController alloc] init];
     
 //    [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] resetKeychainItem];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    self.theme = [[MRSTheme alloc] init];
     
     MainMenuCollectionViewController *menu = [[MainMenuCollectionViewController alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
     
@@ -149,5 +154,9 @@
     [[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error];
     
     [[self.managedObjectContext persistentStoreCoordinator] addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:nil error:&error];//recreates the persistent store
+}
+
++(AppDelegate*) instance {
+    return (AppDelegate *)[[UIApplication sharedApplication] delegate];
 }
 @end

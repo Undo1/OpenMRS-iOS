@@ -19,6 +19,7 @@
 #import "AppDelegate.h"
 #import "MRSPatientIdentifierType.h"
 #import "KeychainItemWrapper.h"
+#import "MRSVitalSigns.h"
 #import "SVProgressHUD.h"
 #import "MRSEncounterOb.h"
 #import "MRSEncounterType.h"
@@ -317,6 +318,26 @@
         {
             completion(error, nil);
         }
+        NSLog(@"Failure, %@", error);
+    }];
+}
++ (void)getVitalsForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *vitals))completion
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter?v=full&patient=%@&encounterType=vitals", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+        completion(nil, [MRSVitalSigns fromJsonList:results[@"results"]]);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(error, nil);
         NSLog(@"Failure, %@", error);
     }];
 }
