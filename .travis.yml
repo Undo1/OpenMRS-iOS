@@ -4,5 +4,5 @@ before_script:
     - brew unlink xctool
     - brew install -v --HEAD xctool
 script:
-    - xctool -workspace OpenMRS-iOS.xcworkspace -scheme OpenMRS-iOS test -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+    - xctool -workspace OpenMRS-iOS.xcworkspace/ -scheme OpenMRS-iOS test -sdk iphonesimulator -xcconfig TestBuild.xcconfig
 osx_image: xcode611
