@@ -23,12 +23,20 @@
 @property (nonatomic, strong) UIButton *goButton;
 @property (nonatomic, strong) UIButton *demoButton;
 
+//Just for state restortion
+@property (nonatomic, strong) NSString *restortionUsername;
+@property (nonatomic, strong) NSString *restortionPasswrod;
+@property (nonatomic, strong) NSString *restortionHost;
+
 @end
 
 @implementation SignInViewController
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.restorationClass = self.class;
+    self.restorationIdentifier = NSStringFromClass(self.class);
+
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
 
@@ -64,6 +72,9 @@
 #ifdef DEBUG
     self.hostTextField.text = @"http://52.27.34.83:8080/openmrs";
 #endif
+    if (self.restortionHost) {
+        self.hostTextField.text = self.restortionHost;
+    }
     self.hostTextField.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:self.hostTextField ];
 
@@ -82,6 +93,9 @@
 #ifdef DEBUG
     self.usernameTextField.text = @"admin";
 #endif
+    if (self.restortionUsername) {
+        self.usernameTextField.text = self.restortionUsername;
+    }
     [self.view addSubview:self.usernameTextField];
 
     self.password = [[UILabel alloc] init];
@@ -100,6 +114,9 @@
 #ifdef DEBUG
     self.passwordTextField.text = @"Admin123";
 #endif
+    if (self.restortionPasswrod) {
+        self.passwordTextField.text = self.restortionPasswrod;
+    }
     [self.view addSubview:self.passwordTextField];
 
     self.goButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -246,6 +263,21 @@
     [wrapper setObject:password forKey:(__bridge id)(kSecValueData)];
     [wrapper setObject:username forKey:(__bridge id)(kSecAttrAccount)];
     [wrapper setObject:host forKey:(__bridge id)(kSecAttrService)];
+}
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.usernameTextField.text forKey:@"username"];
+    [coder encodeObject:self.passwordTextField.text forKey:@"password"];
+    [coder encodeObject:self.hostTextField.text forKey:@"host"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    SignInViewController *signinVC = [[self alloc] init];
+    signinVC.restortionUsername = [coder decodeObjectForKey:@"username"];
+    signinVC.restortionPasswrod = [coder decodeObjectForKey:@"password"];
+    signinVC.restortionHost = [coder decodeObjectForKey:@"host"];
+    return signinVC;
 }
 
 @end
