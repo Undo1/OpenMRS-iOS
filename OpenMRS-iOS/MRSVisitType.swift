@@ -9,20 +9,20 @@ import Foundation
 
 class MRSVisitType : NSObject, NSCoding
 {
-    var uuid: String!
-    var display: String!
+    @objc var uuid: String!
+    @objc var display: String!
 
     override init() {
         super.init()
     }
     required init(coder aDecoder: NSCoder) {
         super.init()
-        self.uuid = aDecoder.decodeObjectForKey("uuid") as! String
-        self.display = aDecoder.decodeObjectForKey("display") as! String
+        self.uuid = aDecoder.decodeObject(forKey: "uuid") as! String
+        self.display = aDecoder.decodeObject(forKey: "display") as! String
     }
 
-    func encodeWithCoder(aCoder: NSCoder) {
-        [aCoder.encodeObject(self.uuid, forKey: "uuid")]
-        [aCoder.encodeObject(self.display, forKey: "display")]
+    func encode(with aCoder: NSCoder) {
+        [aCoder.encode(self.uuid, forKey: "uuid")]
+        [aCoder.encode(self.display, forKey: "display")]
     }
 }

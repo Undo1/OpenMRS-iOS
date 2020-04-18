@@ -8,24 +8,23 @@
 
 import UIKit
 
-class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate
+class LoginViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate
 {
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var scrollView: UIScrollView!
 
     var hostField: UITextField! {
         didSet {
-            hostField.addTarget(self, action: #selector(LoginViewController.updateHost(_:)), forControlEvents: .EditingChanged)
+            hostField.addTarget(self, action: #selector(LoginViewController.updateHost(sender:)), for: .editingChanged)
         }
     }
     var usernameField: UITextField! {
         didSet {
-            usernameField.addTarget(self, action: #selector(LoginViewController.updateUsername(_:)), forControlEvents: .EditingChanged)
+            usernameField.addTarget(self, action: #selector(LoginViewController.updateUsername(sender:)), for: .editingChanged)
         }
     }
     var passwordField: UITextField! {
         didSet {
-            passwordField.addTarget(self, action: #selector(LoginViewController.updatePassword(_:)), forControlEvents: .EditingChanged)
+            passwordField.addTarget(self, action: #selector(LoginViewController.updatePassword(sender:)), for: .editingChanged)
         }
     }
 
@@ -33,21 +32,20 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
     var username: String!
     var password: String!
 
-
-    @IBAction func useDemoServer(sender: UIButton) {
-        self.hostField.text = "http://demo.openmrs.org/openmrs"
-        self.updateHost(self.hostField)
+    @IBAction func useDemoServerTapped(_ sender: Any) {
+        self.hostField.text = "https://demo.openmrs.org/openmrs"
+        self.updateHost(sender: self.hostField)
 
         self.usernameField.text = "admin"
-        self.updateUsername(self.usernameField)
+        self.updateUsername(sender: self.usernameField)
 
         self.passwordField.text = "Admin123"
-        self.updatePassword(self.passwordField)
+        self.updatePassword(sender: self.passwordField)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        UIApplication.sharedApplication().statusBarStyle = .Default
+        UIApplication.shared.statusBarStyle = .default
 
         tableView.reloadData()
         tableView.layoutIfNeeded()
@@ -57,7 +55,8 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 2
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0
         {
             return 3
@@ -67,16 +66,17 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
             return 1
         }
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0
         {
-            let cell = tableView.dequeueReusableCellWithIdentifier("fieldCell")! as! LoginFieldCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "fieldCell")! as! LoginFieldCell
 
             cell.legendLabel.text = ["Host", "Username", "Password"][indexPath.row]
             cell.textField.placeholder = ["Host", "Username", "Password"][indexPath.row]
             cell.textField.text = [host, username, password][indexPath.row]
             cell.textField.delegate = self
-            cell.textField.returnKeyType = .Next
+            cell.textField.returnKeyType = .next
 
             switch indexPath.row {
                 case 0:
@@ -85,20 +85,20 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
                     usernameField = cell.textField
                 case 2:
                     passwordField = cell.textField
-                    cell.textField.secureTextEntry = true
-                    cell.textField.returnKeyType = .Go
+                    cell.textField.isSecureTextEntry = true
+                    cell.textField.returnKeyType = .go
                 default: break
             }
 
-            cell.selectionStyle = .None
+            cell.selectionStyle = .none
 
             return cell
         }
         else
         {
-            let cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
+            let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
 
-            cell.textLabel?.textAlignment = .Center
+            cell.textLabel?.textAlignment = .center
             cell.textLabel?.text = "Login"
             cell.textLabel?.textColor = UIColor(red: 39/255, green: 139/255, blue: 146/255, alpha: 1)
 
@@ -110,44 +110,38 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
     {
         if host == nil || host == "" || username == nil || username == "" || password == nil || password == ""
         {
-            let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Warning label error"), message: "One or more fields are empty. All are required.", preferredStyle: .Alert)
+            let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Warning label error"), message: "One or more fields are empty. All are required.", preferredStyle: .alert)
 
-            alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
 
-            self.showViewController(alert, sender: nil)
+            self.show(alert, sender: nil)
 
             return
         }
 
-        host = addProtocolToHost(host)
+        host = addProtocolToHost(hostString: host)
         self.hostField.text = host
 
-        MBProgressExtension.showBlockWithTitle(NSLocalizedString("Loading", comment: "Label loading"), inView: self.view)
-        OpenMRSAPIManager.verifyCredentialsWithUsername(username, password: password, host: host) { (error: NSError!) in
+        MBProgressExtension.showBlock(withTitle: NSLocalizedString("Loading", comment: "Label loading"), in: self.view)
+        OpenMRSAPIManager.verifyCredentials(withUsername: username, password: password, host: host) { (error: Error!) in
             if error == nil
             {
-                MBProgressExtension.showSucessWithTitle(NSLocalizedString("Logged in", comment: "Message -logged- -in-"), inView: self.presentingViewController!.view)
-                self.updateKeychainItemWithHost(self.host, username: self.username, password: self.password)
+                MBProgressExtension.showSucess(withTitle: NSLocalizedString("Logged in", comment: "Message -logged- -in-"), in: self.presentingViewController!.view)
+                self.updateKeychainItemWithHost(host: self.host, username: self.username, password: self.password)
 
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                    UIApplication.sharedApplication().setStatusBarStyle(.LightContent, animated: true)
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil)
+                    UIApplication.shared.setStatusBarStyle(.lightContent, animated: true)
                 }
             }
             else
             {
-                if error.code == -1011 // Incorrect credentials
-                {
-                    let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Warning label error"), message: NSLocalizedString("Invalid credentials", comment: "warning label invalid credentials"), preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+                let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Warning label error"), message: NSLocalizedString("Invalid credentials", comment: "warning label invalid credentials"), preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
 
-                    self.showViewController(alert, sender: nil)
-                }
-                else
-                {
-                    MRSAlertHandler.alertViewForError(self, error: error).show()
-                }
+                self.show(alert, sender: nil)
             }
+            
         }
     }
 
@@ -162,16 +156,16 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
     func updateKeychainItemWithHost(host: String, username: String, password: String)
     {
         let wrapper = KeychainItemWrapper.init(identifier: "OpenMRS-iOS", accessGroup: nil)
-        wrapper.setObject(host, forKey: kSecAttrService)
-        wrapper.setObject(username, forKey: kSecAttrAccount)
-        wrapper.setObject(password, forKey: kSecValueData)
+        wrapper?.setObject(host, forKey: kSecAttrService)
+        wrapper?.setObject(username, forKey: kSecAttrAccount)
+        wrapper?.setObject(password, forKey: kSecValueData)
     }
 
 
     func addProtocolToHost(hostString: String) -> String {
         if !hostString.hasPrefix("htt") // Account for both http and https. Not perfect, but it works
         {
-            return "http://".stringByAppendingString(hostString)
+            return "https://".appendingFormat(hostString)
         }
 
         return hostString
@@ -187,23 +181,28 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
             login()
         }
 
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
     }
 
+    @objc
     func updateUsername(sender: UITextField!)
     {
         username = sender.text
     }
+
+    @objc
     func updatePassword(sender: UITextField!)
     {
         password = sender.text
     }
+
+    @objc
     func updateHost(sender: UITextField!)
     {
         host = sender.text
     }
 
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == hostField
         {
             usernameField.becomeFirstResponder()
@@ -219,14 +218,14 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
         return false
     }
 
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if UIDevice.current.userInterfaceIdiom == .pad
         {
-            return .All
+            return .all
         }
         else
         {
-            return .Portrait
+            return .portrait
         }
     }
 }

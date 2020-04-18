@@ -1,9 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="bdD-Fy-Lqp">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="bdD-Fy-Lqp">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Login View Controller-->
@@ -15,36 +18,36 @@
                         <viewControllerLayoutGuide type="bottom" id="Jp0-6Q-OAv"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="5kL-Yk-QZO">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BMH-NG-KOD">
-                                <rect key="frame" x="93" y="90" width="414" height="152"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <rect key="frame" x="16" y="90" width="343" height="152"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="414" id="0bY-qJ-VvH"/>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="414" id="9Xu-L1-xVx"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="158" id="jRZ-Rl-V4G"/>
                                     <constraint firstAttribute="height" constant="152" id="zgh-tm-Rm3"/>
                                 </constraints>
-                                <color key="separatorColor" red="0.91398237179487185" green="0.91398237179487185" blue="0.91398237179487185" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="separatorColor" red="0.91398237179487185" green="0.91398237179487185" blue="0.91398237179487185" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="fieldCell" id="B24-TW-9UB" customClass="LoginFieldCell" customModule="OpenMRS_iOS" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="fieldCell" id="B24-TW-9UB" customClass="LoginFieldCell" customModule="OpenMRS_iOS" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="343" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B24-TW-9UB" id="fPa-Zo-Z9O">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w5l-3R-jlO">
-                                                    <rect key="frame" x="8" y="12" width="75" height="20"/>
+                                                    <rect key="frame" x="15" y="12" width="75" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" textAlignment="right" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="ZIg-is-0rk">
-                                                    <rect key="frame" x="91" y="12" width="315" height="20"/>
+                                                    <rect key="frame" x="98" y="12" width="76" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                 </textField>
@@ -75,28 +78,28 @@
                                 </connections>
                             </tableView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="OMRSsig5" translatesAutoresizingMaskIntoConstraints="NO" id="2Q5-1M-D7M">
-                                <rect key="frame" x="203" y="25" width="194" height="50"/>
+                                <rect key="frame" x="90.5" y="25" width="194" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="J9B-p9-LeF"/>
                                     <constraint firstAttribute="width" constant="194" id="i09-Vr-jNM"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pxd-VE-je1">
-                                <rect key="frame" x="242" y="242" width="117" height="14"/>
+                                <rect key="frame" x="129" y="242" width="117" height="14"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="14" id="x9w-dH-fmL"/>
                                     <constraint firstAttribute="width" constant="117" id="xeY-3q-JRb"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <state key="normal" title="Use demo server">
-                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" red="0.66666668653488159" green="0.66666668653488159" blue="0.66666668653488159" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="useDemoServer:" destination="bdD-Fy-Lqp" eventType="touchUpInside" id="wSf-kn-1T7"/>
+                                    <action selector="useDemoServerTapped:" destination="bdD-Fy-Lqp" eventType="touchUpInside" id="yQr-Wn-vuQ"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="BMH-NG-KOD" firstAttribute="centerX" secondItem="5kL-Yk-QZO" secondAttribute="centerX" id="5Qy-mJ-Kvj"/>
                             <constraint firstItem="BMH-NG-KOD" firstAttribute="top" secondItem="2Q5-1M-D7M" secondAttribute="bottom" constant="15" id="a5I-Ca-PVC"/>
@@ -118,6 +121,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="OMRSsig5" width="194" height="50"/>
+        <image name="OMRSsig5" width="93.120002746582031" height="24"/>
     </resources>
 </document>

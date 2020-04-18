@@ -18,6 +18,6 @@ class LoginFieldCell : UITableViewCell
     }
 
     init(reuseIdentifier: String) {
-        super.init(style: .Default, reuseIdentifier: reuseIdentifier)
+        super.init(style: .default, reuseIdentifier: reuseIdentifier)
     }
 }

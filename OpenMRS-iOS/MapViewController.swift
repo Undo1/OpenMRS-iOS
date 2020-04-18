@@ -11,16 +11,16 @@ import MapKit
 
 class MapViewController : UIViewController
 {
-    var patient: MRSPatient! {
+    @objc var patient: MRSPatient! {
         didSet {
             self.title = patient.name
 
             let geocoder = CLGeocoder()
-            geocoder.geocodeAddressString(patient.formattedPatientAddress()) { (placemark: [CLPlacemark]?, error: NSError?) in
+            geocoder.geocodeAddressString(patient.formattedPatientAddress()) { (placemark: [CLPlacemark]?, error: Error?) in
                 if placemark != nil && !(placemark?.isEmpty)!
                 {
                     let place = placemark![0]
-                    self.mapView.setCenterCoordinate((place.location?.coordinate)!, animated: true)
+                    self.mapView.setCenter((place.location?.coordinate)!, animated: true)
 
                     let span = MKCoordinateSpan(latitudeDelta: 0.3, longitudeDelta: 0.3)
                     let region = MKCoordinateRegion(center: (place.location?.coordinate)!, span: span)
@@ -32,12 +32,12 @@ class MapViewController : UIViewController
                 }
                 else
                 {
-                    self.navigationController?.popViewControllerAnimated(true)
+                    self.navigationController?.popViewController(animated: true)
 
-                    let alert = UIAlertController(title: "Couldn't find address", message: "It may be spelled incorrectly", preferredStyle: .Alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+                    let alert = UIAlertController(title: "Couldn't find address", message: "It may be spelled incorrectly", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
 
-                    self.navigationController?.presentViewController(alert, animated: true, completion: nil)
+                    self.navigationController?.present(alert, animated: true, completion: nil)
                 }
             }
         }
@@ -45,7 +45,7 @@ class MapViewController : UIViewController
 
     var mapView: MKMapView!
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
 
@@ -59,8 +59,8 @@ class MapViewController : UIViewController
         mapView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(mapView)
 
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[subview]-0-|", options: .DirectionLeadingToTrailing, metrics: nil, views: ["subview" : mapView]))
-        self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[subview]-0-|", options: .DirectionLeadingToTrailing, metrics: nil, views: ["subview" : mapView]))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[subview]-0-|", options: .directionLeadingToTrailing, metrics: nil, views: ["subview" : mapView]))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[subview]-0-|", options: .directionLeadingToTrailing, metrics: nil, views: ["subview" : mapView]))
     }
 
 }

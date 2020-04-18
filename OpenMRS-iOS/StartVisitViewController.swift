@@ -17,55 +17,62 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
     var visitType: MRSVisitType!
     var cachedVisitTypes: [MRSVisitType]!
     var location: MRSLocation!
-    var patient: MRSPatient!
-    var delegate: StartVisitViewControllerDelegate!
+    @objc var patient: MRSPatient!
+    @objc var delegate: StartVisitViewControllerDelegate!
 
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    override init(style: UITableViewStyle) {
-        super.init(style: UITableViewStyle.Grouped)
+
+    override init(style: UITableView.Style) {
+        super.init(style: UITableView.Style.grouped)
     }
-    override func viewWillAppear(animated: Bool) {
+
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
+        MRSHelperFunctions.updateTableView(forDynamicTypeSize: self.tableView)
     }
+
+    @objc
     func updateFontSize() {
-        MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
+        MRSHelperFunctions.updateTableView(forDynamicTypeSize: self.tableView)
     }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.restorationIdentifier = NSStringFromClass(self.dynamicType);
-        self.restorationClass = self.dynamicType;
+        self.restorationIdentifier = String(describing: self)
+        self.restorationClass = type(of: self)
 
-        let defaultCenter = NSNotificationCenter.defaultCenter()
-        defaultCenter.addObserver(self, selector:#selector(StartVisitViewController.updateFontSize), name: UIContentSizeCategoryDidChangeNotification, object: nil)
-        MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
+        let defaultCenter = NotificationCenter.default
+        defaultCenter.addObserver(self, selector:#selector(StartVisitViewController.updateFontSize), name: UIContentSizeCategory.didChangeNotification, object: nil)
+        MRSHelperFunctions.updateTableView(forDynamicTypeSize: self.tableView)
 
         self.title = NSLocalizedString("Start Visit", comment: "Label -start- -visit-")
 
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(StartVisitViewController.cancel))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(StartVisitViewController.done))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(StartVisitViewController.cancel))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(StartVisitViewController.done))
 
         self.reloadData()
 
         self.updateDoneButtonState()
     }
 
+    @objc
     func done()
     {
-        MBProgressExtension.showSucessWithTitle(NSLocalizedString("Loading", comment: "Label loading"), inView: self.view)
-        OpenMRSAPIManager.startVisitWithLocation(location, visitType: visitType, forPatient: patient) { (error:NSError!) -> Void in
+        MBProgressExtension.showSucess(withTitle: NSLocalizedString("Loading", comment: "Label loading"), in: self.view)
+        OpenMRSAPIManager.startVisit(with: location, visitType: visitType, for: patient) { (error: Error!) -> Void in
             if error == nil
             {
-                MBProgressExtension.hideActivityIndicatorInView(self.view)
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.delegate?.didCreateVisitForPatient(self.patient)
-                    MBProgressExtension.showSucessWithTitle(NSLocalizedString("Completed", comment: "Label loading"), inView: self.presentingViewController?.view)
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                MBProgressExtension.hideActivityIndicator(in: self.view)
+                DispatchQueue.main.async {
+                    self.delegate?.didCreateVisitForPatient(patient: self.patient)
+                    MBProgressExtension.showSucess(withTitle: NSLocalizedString("Completed", comment: "Label loading"), in: self.presentingViewController?.view)
+                    self.dismiss(animated: true, completion: nil)
                 }
             } else {
                 MRSAlertHandler.alertViewForError(self, error: error).show()
@@ -75,17 +82,17 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
 
     func reloadData()
     {
-        MBProgressExtension.showSucessWithTitle(NSLocalizedString("Loading", comment: "Label loading"), inView: self.view)
-        OpenMRSAPIManager.getVisitTypesWithCompletion { (error:NSError!, types:[AnyObject]!) -> Void in
-            MBProgressExtension.hideActivityIndicatorInView(self.view)
+        MBProgressExtension.showSucess(withTitle: NSLocalizedString("Loading", comment: "Label loading"), in: self.view)
+        OpenMRSAPIManager.getVisitTypes { (error: Error!, types: [Any]!) -> Void in
+            MBProgressExtension.hideActivityIndicator(in: self.view)
             if error == nil
             {
-                self.cachedVisitTypes = types as! [MRSVisitType]!
+                self.cachedVisitTypes = types as! [MRSVisitType]?
                 if types.count == 1
                 {
                     self.visitType = types[0] as! MRSVisitType
 
-                    dispatch_async(dispatch_get_main_queue()) {
+                    DispatchQueue.main.async {
                         self.tableView.reloadData()
                         self.updateDoneButtonState()
                     }
@@ -96,15 +103,17 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
         }
     }
 
+    @objc
     func cancel()
     {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section
         {
         case 0:
@@ -115,7 +124,8 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
             return 0
         }
     }
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section
         {
         case 0:
@@ -126,15 +136,16 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
             return nil
         }
     }
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section
         {
         case 0:
-            var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("visit_type")
+            var cell: UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: "visit_type")
 
             if cell == nil
             {
-                cell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "visit_type")
+                cell = UITableViewCell(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "visit_type")
             }
 
             cell.textLabel?.text = NSLocalizedString("Visit Type", comment: "Label -visit- -type-")
@@ -148,15 +159,15 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
                 cell.detailTextLabel?.text = visitType.display
             }
 
-            cell.accessoryType = .DisclosureIndicator
+            cell.accessoryType = .disclosureIndicator
 
             return cell
         case 1:
-            var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("location")
+            var cell: UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: "location")
 
             if cell == nil
             {
-                cell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "location")
+                cell = UITableViewCell(style: UITableViewCell.CellStyle.value1, reuseIdentifier: "location")
             }
 
             cell.textLabel?.text = NSLocalizedString("Location", comment:"Label location")
@@ -170,34 +181,34 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
                 cell.detailTextLabel?.text = location.display
             }
 
-            cell.accessoryType = .DisclosureIndicator
+            cell.accessoryType = .disclosureIndicator
 
             return cell
         default:
             return UITableViewCell()
         }
-
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section
         {
         case 0:
-            let vc = SelectVisitTypeView(style: UITableViewStyle.Plain)
+            let vc = SelectVisitTypeView(style: UITableView.Style.plain)
             vc.delegate = self
             vc.visitTypes = cachedVisitTypes
             self.navigationController?.pushViewController(vc, animated: true)
         case 1:
-            let vc = LocationListTableViewController(style: UITableViewStyle.Plain)
+            let vc = LocationListTableViewController(style: UITableView.Style.plain)
             vc.delegate = self
             self.navigationController?.pushViewController(vc, animated: true)
         default:
             return
         }
     }
-    func didChooseLocation(newLocation: MRSLocation) {
-        location = newLocation
-        self.navigationController?.popToRootViewControllerAnimated(true)
+
+    func didChoose(_ location: MRSLocation!) {
+        self.location = location
+        self.navigationController?.popToRootViewController(animated: true)
         tableView.reloadData()
         self.updateDoneButtonState()
     }
@@ -209,28 +220,28 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
     }
 
     func updateDoneButtonState() {
-        self.navigationItem.rightBarButtonItem?.enabled = (location != nil && visitType != nil)
+        self.navigationItem.rightBarButtonItem?.isEnabled = (location != nil && visitType != nil)
     }
 
-    override func encodeRestorableStateWithCoder(coder: NSCoder) {
-        coder.encodeObject(self.patient, forKey: "patient")
-        coder.encodeObject(self.delegate, forKey: "delegate")
+    override func encodeRestorableState(with coder: NSCoder) {
+        coder.encode(self.patient, forKey: "patient")
+        coder.encode(self.delegate, forKey: "delegate")
         let nils:[Bool] = [self.visitType == nil, self.location == nil]
-        coder.encodeObject(nils, forKey:"nils")
-        coder.encodeObject(self.visitType, forKey: "visitType")
-        coder.encodeObject(self.location, forKey: "location")
+        coder.encode(nils, forKey:"nils")
+        coder.encode(self.visitType, forKey: "visitType")
+        coder.encode(self.location, forKey: "location")
     }
 
-    static func viewControllerWithRestorationIdentifierPath(identifierComponents: [AnyObject], coder: NSCoder) -> UIViewController? {
-        let startVisit: StartVisitViewController = StartVisitViewController(style: UITableViewStyle.Grouped)
-        startVisit.patient = coder.decodeObjectForKey("patient") as! MRSPatient
-        startVisit.delegate = coder.decodeObjectForKey("delegate") as! StartVisitViewControllerDelegate
-        let nils:[Bool] = coder.decodeObjectForKey("nils") as! Array
+    static func viewController(withRestorationIdentifierPath identifierComponents: [String], coder: NSCoder) -> UIViewController? {
+        let startVisit: StartVisitViewController = StartVisitViewController(style: UITableView.Style.grouped)
+        startVisit.patient = coder.decodeObject(forKey: "patient") as! MRSPatient
+        startVisit.delegate = coder.decodeObject(forKey: "delegate") as! StartVisitViewControllerDelegate
+        let nils:[Bool] = coder.decodeObject(forKey: "nils") as! Array
         if (nils[0]==false) {
-            startVisit.visitType = coder.decodeObjectForKey("visitType") as! MRSVisitType;
+            startVisit.visitType = coder.decodeObject(forKey: "visitType") as! MRSVisitType;
         }
         if (nils[1]==false) {
-            startVisit.location = coder.decodeObjectForKey("location") as! MRSLocation
+            startVisit.location = coder.decodeObject(forKey: "location") as! MRSLocation
         }
         return startVisit
     }

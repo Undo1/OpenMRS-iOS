@@ -9,23 +9,23 @@
 import UIKit
 
 class PatientPeekNavigationController : UINavigationController {
-    var patient: MRSPatient!
-    var searchController: PatientSearchViewController!
+    @objc var patient: MRSPatient!
+    @objc var searchController: PatientSearchViewController!
 
     @available(iOS 9.0, *)
-    override func previewActionItems() -> [UIPreviewActionItem] {
-        let editAction = UIPreviewAction(title: NSLocalizedString("Edit patient", comment: "Title -Edit- -patient-"), style: .Default) { (action: UIPreviewAction, viewController: UIViewController) in
+    override var previewActionItems: [UIPreviewActionItem] {
+        let editAction = UIPreviewAction(title: NSLocalizedString("Edit patient", comment: "Title -Edit- -patient-"), style: .default) { (action: UIPreviewAction, viewController: UIViewController) in
             let navigationController = viewController as! UINavigationController
             let patientViewController = navigationController.viewControllers[0] as! PatientViewController
 
-            patientViewController.presentEditViewController(patientViewController.patient, fromViewController: UIApplication.sharedApplication().keyWindow?.rootViewController)
+            patientViewController.presentEdit(patientViewController.patient, from: UIApplication.shared.keyWindow?.rootViewController)
         }
 
-        let captureVitalsAction = UIPreviewAction(title: NSLocalizedString("Capture Vitals", comment: "Label -capture- -vitals-"), style: .Default) { (action: UIPreviewAction, viewController: UIViewController) in
+        let captureVitalsAction = UIPreviewAction(title: NSLocalizedString("Capture Vitals", comment: "Label -capture- -vitals-"), style: .default) { (action: UIPreviewAction, viewController: UIViewController) in
             let navigationController = viewController as! UINavigationController
             let patientViewController = navigationController.viewControllers[0] as! PatientViewController
 
-            patientViewController.presentCaptureVitalsViewController(patientViewController.patient, fromViewController: UIApplication.sharedApplication().keyWindow?.rootViewController)
+            patientViewController.presentCaptureVitalsViewController(patientViewController.patient, from: UIApplication.shared.keyWindow?.rootViewController)
         }
 
         return [editAction, captureVitalsAction]
